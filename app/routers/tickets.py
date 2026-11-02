@@ -73,7 +73,7 @@ def update_ticket(
 
 @router.delete(
     "/{ticket_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
+    status_code=status.HTTP_200_OK,
     summary="Удалить тикет",
 )
 def delete_ticket(

@@ -63,7 +63,7 @@
    - При отсутствии тикета с запрашиваемым ticket_id:
      HTTP 404 Not Found (тело: {"detail": "Тикет <id> не найден"}).
    - При попытке запрещённого перехода статуса:
-     HTTP 409 Conflict (тело: {"detail": "Переход <current> -> <target> запрещён"})
+     HTTP 400 Bad Request (тело: {"detail": "Переход <current> -> <target> запрещён"})
 """
 
 from fastapi import FastAPI, Request, status
@@ -92,9 +92,9 @@ def handle_not_found(request: Request, exc: TicketNotFoundError) -> JSONResponse
 def handle_invalid_transition(
     request: Request, exc: InvalidStatusTransitionError
 ) -> JSONResponse:
-    """Обработчик недопустимого перехода статуса — возвращает 409 Conflict."""
+    """Обработчик недопустимого перехода статуса — возвращает 400 Bad Request."""
     return JSONResponse(
-        status_code=status.HTTP_409_CONFLICT,
+        status_code=status.HTTP_400_BAD_REQUEST,
         content={"detail": str(exc)},
     )
 
