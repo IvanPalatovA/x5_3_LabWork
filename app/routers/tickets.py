@@ -5,10 +5,9 @@
 Внутри роутера отсутствует бизнес-логика, циклы for, проверки статусов и raise HTTPException.
 """
 
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, Query, status
 
 from ..dependencies import ServiceDep
-from ..exceptions import InvalidStatusTransitionError
 from ..schemas import Ticket, TicketCreate, TicketPage, TicketUpdate
 
 router = APIRouter(prefix="/tickets", tags=["tickets"])
@@ -69,13 +68,7 @@ def update_ticket(
     changes: TicketUpdate,
     service: ServiceDep,
 ) -> Ticket:
-    try:
-        return service.update_ticket(ticket_id, changes)
-    except InvalidStatusTransitionError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(exc),
-        )
+    return service.update_ticket(ticket_id, changes)
 
 
 @router.delete(
